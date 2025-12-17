@@ -18,7 +18,7 @@ jobs:
       - name: Install KDE Craft
         run: |
           curl -L https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
-          python3 setup.py --prefix $HOME/CraftRoot
+          python3 setup.py --prefix $HOME/CraftRoot --use-defaults
 
       - name: Load Craft environment
         run: |
