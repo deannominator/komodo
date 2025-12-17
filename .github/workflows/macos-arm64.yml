@@ -1,0 +1,44 @@
+name: macOS arm64 build (Craft)
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Xcode tools
+        run: xcode-select --install || true
+
+      - name: Install KDE Craft
+        run: |
+          curl -L https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
+          python3 setup.py --prefix $HOME/CraftRoot
+
+      - name: Load Craft environment
+        run: |
+          source $HOME/CraftRoot/craft/craftenv.sh
+          craft --version
+
+      - name: Build KomoDo with Craft
+        run: |
+          source $HOME/CraftRoot/craft/craftenv.sh
+          craft komodo
+
+      - name: Package (DMG)
+        run: |
+          source $HOME/CraftRoot/craft/craftenv.sh
+          craft --package komodo
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: komodo-macos-arm64
+          path: |
+            $HOME/CraftRoot/build/**/image-*/**/*.dmg
+            $HOME/CraftRoot/build/**/image-*/Applications/**/*.app
