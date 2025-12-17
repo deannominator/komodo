@@ -16,6 +16,9 @@ jobs:
         run: xcode-select --install || true
 
       - name: Install KDE Craft
+        env:
+          PIP_BREAK_SYSTEM_PACKAGES: "1"
+          PIP_DISABLE_PIP_VERSION_CHECK: "1"
         run: |
           curl -L https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
           python3 setup.py --prefix $HOME/CraftRoot --use-defaults
