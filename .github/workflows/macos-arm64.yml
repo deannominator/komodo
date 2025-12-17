@@ -20,15 +20,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install KDE Craft
+      - name: Install KDE Craft (force arm64)
         run: |
           python -V
           python -m pip --version
           curl -L https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
-          python setup.py --prefix $HOME/CraftRoot --use-defaults
 
-          curl -L https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
-          python3 setup.py --prefix $HOME/CraftRoot --use-defaults
+          # CraftBootstrap on macOS defaults to x86_64.
+          # Feed "1" to select arm64, then press Enter for the next prompt(s).
+          printf "1\n\n" | python setup.py --prefix "$HOME/CraftRoot"
 
       - name: Load Craft environment
         run: |
