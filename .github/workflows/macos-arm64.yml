@@ -15,11 +15,18 @@ jobs:
       - name: Xcode tools
         run: xcode-select --install || true
 
+      - name: Setup Python (non-Homebrew)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install KDE Craft
-        env:
-          PIP_BREAK_SYSTEM_PACKAGES: "1"
-          PIP_DISABLE_PIP_VERSION_CHECK: "1"
         run: |
+          python -V
+          python -m pip --version
+          curl -L https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
+          python setup.py --prefix $HOME/CraftRoot --use-defaults
+
           curl -L https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
           python3 setup.py --prefix $HOME/CraftRoot --use-defaults
 
